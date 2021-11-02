@@ -32,7 +32,7 @@ public class LightingPreset : ScriptableObject
 
 Save and go into Unity, make an instance of the Light Preset menu by right clicking in the Asset folder and selecting it in the menu under Create>Scriptables>LightingPreset. Rename the instance as **Lighting Presets**.
 
-![image](https://user-images.githubusercontent.com/72862464/139852754-c4b11901-6d1d-4043-8fa5-353e19e44784.png)
+![image](https://user-images.githubusercontent.com/72862464/139858798-bb1add72-45aa-4fab-affd-62839afb071c.png)
 
 In the image above, I have already chosen the colours within my gradients, and suggest you do the same.
 
@@ -134,7 +134,8 @@ private void OnValidate()
   
   Now, add an empty game object into the scene and call it something along the lines of **Lighting Manager** and attach the **LightingManager** script to it. Now, you should be able to see in the editor the lighting manager script functions.
   In the editor, assign the Lighting Preset asset to the variable, so the menu in the editor should looks like this:
-  ![image](https://user-images.githubusercontent.com/72862464/139857917-e984d5ef-6b97-4b2e-a446-33d7beb51002.png)
+    
+  ![image](https://user-images.githubusercontent.com/72862464/139858999-2a6d6ca3-a86c-4e9c-a981-13e43ff0d36e.png)
 
   Now, when moving the slider for the time of day, the directional light should be moving in the scene, casting light from different angles.
   
