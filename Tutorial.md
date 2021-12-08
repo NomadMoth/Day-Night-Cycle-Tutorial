@@ -3,7 +3,8 @@ Two scripts which will allow for day and night cycles at a rate specified by the
 
 ## 1) Creating a Scene
 
-Simply add a **plane** and some 3D objects on top of it, whether they be cubes, spheres or anything else, it matters little as they are simply there to show us the movement of shadows and in turn the movement of the directional light.
+Simply add a **plane** and some 3D objects on top of it, whether they be cubes, spheres or anything else, it matters little as they are simply there to show us the movement of 
+shadows and in turn the movement of the directional light.
 
 At this stage, you could change the name of the directional light (which will be automatically present in any new scene) to **Sun**.
 
@@ -15,22 +16,21 @@ The Lighting Manager will control the direction of our light.
 
 To do so, we need to create two new scripts, one called **LightingPreset**, and the other called **LightingManager**.
 
-After these scripts have been made, open the **LightingPreset** script in Visual Studio and set it to be a ScriptableObject rather than a MonoBehaviour. This will allow us to use the script as a means to store data to draw upon in between scenes.
+After these scripts have been made, open the **LightingPreset** script in Visual Studio and set it to be a ScriptableObject rather than a MonoBehaviour. This will allow us to 
+use the script as a means to store data to draw upon in between scenes.
 
-Additionally, we will need to add **[System.Serializable]** above the class definition, as well as **[CreateAssetMenu(fileName = "Lighting Preset", menuName = "Scriptables/Lighting Preset", order = 1)]** which will create a file and menu within Unity's editor.
+Additionally, we will need to add **[System.Serializable]** above the class definition, as well as **[CreateAssetMenu(fileName = "Lighting Preset", menuName = 
+"Scriptables/Lighting Preset", order = 1)]** which will create a file and menu within Unity's editor.
 
-Next, we need to add gradient variables into the script. These will allow us to edit the ambient, fog and directional colours. Create public gradients referring to these lights and you should have something similar to this;
+Next, we need to add gradient variables into the script. These will allow us to edit the ambient, fog and directional colours. Create public gradients referring to these lights
+and you should have something similar to this;
 
-[System.Serializable]
-[CreateAssetMenu(fileName = "Lighting Preset", menuName = "Scriptables/Lighting Preset", order = 1)]
-public class LightingPreset : ScriptableObject
-{
     public Gradient ambientColour;
     public Gradient directionalColour;
     public Gradient fogColour;
-}
 
-Save and go into Unity, make an instance of the Light Preset menu by right clicking in the Asset folder and selecting it in the menu under Create>Scriptables>LightingPreset. Rename the instance as **Lighting Presets**.
+Save and go into Unity, make an instance of the Light Preset menu by right clicking in the Asset folder and selecting it in the menu under Create>Scriptables>LightingPreset.
+Rename the instance as **Lighting Presets**.
 
 ![image](https://user-images.githubusercontent.com/72862464/139858798-bb1add72-45aa-4fab-affd-62839afb071c.png)
 
@@ -38,7 +38,8 @@ In the image above, I have already chosen the colours within my gradients, and s
 
 ## 3) The Lighting Manager
 
-Within the **LightingManager** script, create private variables for a Light called directionalLight, a reference to the **LightingPreset**, as well as a variable to keep track of the time so that it is visible within the editor. Serialize all these fields so that they are exposed within the editor.
+Within the **LightingManager** script, create private variables for a Light called directionalLight, a reference to the **LightingPreset**, as well as a variable to keep track
+of the time so that it is visible within the editor. Serialize all these fields so that they are exposed within the editor.
 
     //references
     [SerializeField] private Light directionalLight;
@@ -46,16 +47,14 @@ Within the **LightingManager** script, create private variables for a Light call
     //variables
     [SerializeField, Range(0, 24)] private float timeOfDay;
     
-Additionally, add an ExecuteInEditMode attribute above the class definition to allow certain methods in the class to be able to execute when the game is not running and in the editor.
-
-[ExecuteInEditMode]
-public class LightingManager : MonoBehaviour
+Additionally, add an ExecuteInEditMode attribute above the class definition to allow certain methods in the class to be able to execute when in the editor.
 
 This can be used, for instance, to adjust the time of day within the editor to see the effects it has on the scene.
 
-Next, we will write in an OnValidate function that will be called everytime the script is reloaded or something is changed within the inspector, and, unless specified otherwise, will set the directional light as the one that is currently within the scene.
+Next, we will write in an OnValidate function that will be called everytime the script is reloaded or something is changed within the inspector, and, unless specified otherwise,
+will set the directional light as the one that is currently within the scene.
 
-private void OnValidate()
+
     {
         if (directionalLight != null)
         {
@@ -83,9 +82,9 @@ private void OnValidate()
   
   We will use an input variable, ranging from 0 to 1, and then set the RenderSettings to evaluate the gradients in the lighting preset dependant on the time of day.
   
-  Additionally, we will need to ensure that we have actually assigned a directional light, then set the colour and the rotations depending on the time of day using a loop        function.
+  Additionally, we will need to ensure that we have actually assigned a directional light, then set the colour and the rotations depending on the time of day using a 
+  loop function. Create a private void UpdateLighting(float timePercent) and within the function write this:
   
-  private void UpdateLighting(float timePercent)
     {
         RenderSettings.ambientLight = preset.ambientColour.Evaluate(timePercent);
         RenderSettings.fogColor = preset.fogColour.Evaluate(timePercent);
@@ -99,23 +98,16 @@ private void OnValidate()
   
   Finally, we will write an Update method to ensure the lighting is changing frame by frame.
   
-  First, we will want to check that we have assigned a lighting preset through an if statement.
+  First, we will want to check that we have assigned a lighting preset through an if statement in the Update function.
   
-  private void Update()
     {
         if (preset==null)
         {
             return;
         }
   
-  Next we will want to update the lighting along with the time as the application is playing.
+  Next we will want to update the lighting along with the time as the application is playing, which will also be done in the Update function.
   
-  private void Update()
-    {
-        if (preset==null)
-        {
-            return;
-        }
         if (Application.isPlaying)
         {
             timeOfDay += Time.deltaTime * 0.5f;
@@ -132,7 +124,8 @@ private void OnValidate()
   
   ## 4) Testing the Cycle in Unity
   
-  Now, add an empty game object into the scene and call it something along the lines of **Lighting Manager** and attach the **LightingManager** script to it. Now, you should be able to see in the editor the lighting manager script functions.
+  Now, add an empty game object into the scene and call it something along the lines of **Lighting Manager** and attach the **LightingManager** script to it. 
+  Now, you should be able to see in the editor the lighting manager script functions.
   In the editor, assign the Lighting Preset asset to the variable, so the menu in the editor should looks like this:
     
   ![image](https://user-images.githubusercontent.com/72862464/139858999-2a6d6ca3-a86c-4e9c-a981-13e43ff0d36e.png)
